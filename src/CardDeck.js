@@ -12,5 +12,16 @@ CardDeck.prototype.size = function() {
 }
 
 CardDeck.prototype.shuffle = function() {
+  var tempCard, index;
   
+  for (var i = 0; i < this._cards.length; i++) {
+    index = Math.floor(Math.random() * this._cards.length);
+    tempCard = this._cards[i];
+    this._cards[i] = this._cards[index];
+    this._cards[index] = tempCard;
+  }
+}
+
+CardDeck.prototype.draw = function() {
+  return this._cards.pop();
 }
