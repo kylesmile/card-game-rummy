@@ -12,7 +12,7 @@ describe("CardDeck", function() {
   it("can be shuffled", function() {
     var shuffledDeck = new CardDeck;
     shuffledDeck.shuffle();
-    
+        
     var i;
     
     for (i = 0; i < 52; i++) {
@@ -26,6 +26,7 @@ describe("CardDeck", function() {
   
   it("allows drawing the top card", function() {
     var card = deck.draw();
+    expect(card).toBeAKindOf(RummyCard);
     expect(card.rank()).toEqual("K");
     expect(card.suit()).toEqual("H");
   });
