@@ -2,6 +2,7 @@ function RummyGame(playerCount) {
   playerCount = playerCount || 4;
   
   this._deck = new CardDeck;
+  this._deck.shuffle();
   this._players = [];
   this._discardPile = new RummyDiscardPile;
   
