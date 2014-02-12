@@ -13,28 +13,27 @@ RummyView.prototype.discardPile = function() {
 
 RummyView.prototype.displayCards = function(cards, element) {
   cards.forEach(function(card) {
-    var li = document.createElement("li");
-    li.innerText = card.rank() + "-" + card.suit();
-    element.appendChild(li);
+    var li = $("<li>" + card.rank() + "-" + card.suit() + "</li>");
+    element.append(li);
   });
 };
 
 RummyView.prototype.displayHand = function() {
-  var cardsList = document.getElementById("hand");
+  var cardsList = $("#hand");
   var hand = this.hand();
   this.displayCards(hand, cardsList);
 };
 
 RummyView.prototype.displayDiscardPile = function() {
-  var discardPileList = document.getElementById("discard");
+  var discardPileList = $("#discard");
   discardPileList.innerText = "";
   
   var cards = this.discardPile().cards();
   this.displayCards(cards, discardPileList);
 };
 
-window.onload = function() {
+$(document).ready(function() {
   var view = new RummyView(1);
   view.displayHand();
   view.displayDiscardPile();
-}
+});
