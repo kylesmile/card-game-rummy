@@ -2,6 +2,15 @@ body {
   background-color: #531;
 }
 
+.deck-discard {
+  width: 9.5em;
+  margin: auto;
+}
+
+.deck, .discard {
+  display: inline-block;
+}
+
 header, .game, footer {
   max-width: 700px;
   margin: auto;
