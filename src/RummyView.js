@@ -1,5 +1,5 @@
 function RummyView(playerNumber) {
-  this.game = new RummyGame;
+  this.game = new RummyGame(2);
   this.player = playerNumber;
 }
 
@@ -24,20 +24,40 @@ RummyView.prototype.displayCards = function(cards, element) {
 
 RummyView.prototype.displayHand = function() {
   var cardsList = $("#hand");
+  cardsList.find('li').remove();
   var hand = this.hand();
-  this.displayCards(hand, cardsList);
+  hand.forEach(function(card, index) {
+    var li = $('<li data-index="' + index + '"><img src="images/cards/' + imageName(card) + '"/></li>');
+    li.click(this, function(clickEvent) {
+      clickEvent.data.game.discard($(this).data('index'));
+      clickEvent.data.displayHand();
+      clickEvent.data.displayDiscardPile();
+    });
+    cardsList.append(li);
+  }, this);
 };
 
 RummyView.prototype.displayDeck = function() {
   var deckSection = $(".deck-discard");
-  deckSection.append('<img class="deck" src="images/cards/backs_blue.png"/>')
+  var deck = $('<img></img>');
+  deck.addClass('deck');
+  deck.attr('src', 'images/cards/backs_blue.png');
+  deck.click(this, function(clickEvent) {
+    clickEvent.data.game.draw();
+    clickEvent.data.displayHand();
+  });
+  deckSection.append(deck)
 }
 
 RummyView.prototype.displayDiscardPile = function() {
-  var discardPileList = $(".deck-discard").append('<ul class="discard"></ul>').find('ul');
+  var discardPileSection = $(".deck-discard");
+  discardPileSection.find('ul').remove();
+  var discardPileList = $('<ul class="discard"></ul>');
   
   var cards = this.discardPile().cards();
   this.displayCards(cards, discardPileList);
+  
+  discardPileSection.append(discardPileList);
 };
 
 $(document).ready(function() {

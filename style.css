@@ -3,7 +3,7 @@ body {
 }
 
 .deck-discard {
-  width: 9.5em;
+  width: auto;
   margin: auto;
 }
 
@@ -33,4 +33,16 @@ ul {
 li {
   display: inline-block;
   margin: 0.2em;
+}
+
+.hand li {
+  text-indent:-35px;
+}
+
+.discard li {
+  text-indent:-50px;
+}
+
+.hand li:first-child, .discard li:first-child {
+  text-indent:0;
 }
