@@ -3,12 +3,19 @@ body {
 }
 
 .deck-discard {
-  width: auto;
-  margin: auto;
+  margin-left: 37%;
 }
 
 .deck, .discard {
   display: inline-block;
+}
+
+.deck, .discard img, .opponent img {
+  width: 50px;
+}
+
+.opponent {
+  text-align: right;
 }
 
 header, .game, footer {
@@ -40,7 +47,7 @@ li {
 }
 
 .discard li {
-  text-indent:-50px;
+  text-indent:-40px;
 }
 
 .hand li:first-child, .discard li:first-child {
