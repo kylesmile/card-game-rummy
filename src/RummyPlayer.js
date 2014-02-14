@@ -25,7 +25,5 @@ RummyPlayer.prototype.sortCards = function() {
 }
 
 RummyPlayer.prototype.play = function(cardIndex) {
-  var playedCard = this.cards()[cardIndex];
-  this._cards = this.cards().filter(function(card) {return card != playedCard})
-  return playedCard;
+  return this.cards().splice(cardIndex, 1)[0];
 };
