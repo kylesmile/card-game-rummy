@@ -45,7 +45,7 @@ RummyView.prototype.updateHand = function() {
   cardsList.find('li').remove();
   var hand = this.hand();
   hand.forEach(function(card, index) {
-    var li = $('<li data-index="' + index + '"></li>');
+    var li = $('<li></li>');
     var image = $('<img src="images/cards/' + this.imageName(card) + '"/>')
     li.append(image);
     image.click(this, function(clickEvent) {
@@ -82,9 +82,24 @@ RummyView.prototype.updateDeck = function() {
   }
 }
 
+RummyView.prototype.updateMeldButton = function() {
+  var turnSection = $('.turn');
+  var meldButton = $('<a id="meld-button" class="button">Meld</a>');
+  
+  turnSection.find('#meld-button').remove();
+  if (this.game.canMeldSelected()) {
+    meldButton.click(function(clickEvent) {
+      alert("You could meld those if that was implemented!!!")
+    });
+  } else {
+    meldButton.addClass('disabled');
+  }
+  turnSection.append(meldButton);
+}
+
 RummyView.prototype.updateDiscardButton = function() {
   var turnSection = $('.turn');
-  var discardButton = $('<span id="discard-button" class="button">Discard</span>');
+  var discardButton = $('<a id="discard-button" class="button">Discard</a>');
   
   turnSection.find('#discard-button').remove();
   if (this.game.canDiscardSelected()) {
@@ -117,6 +132,7 @@ RummyView.prototype.updateView = function() {
   this.updateDiscardPile();
   this.updateHand();
   this.updateDiscardButton();
+  this.updateMeldButton();
 }
 
 $(document).ready(function() {

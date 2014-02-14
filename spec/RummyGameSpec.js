@@ -101,11 +101,12 @@ describe("RummyGame", function() {
     var aceOfSpades = new RummyCard("A", "S");
     var aceOfDiamonds = new RummyCard("A", "D");
     var aceOfHearts = new RummyCard("A", "H");
+    var twoOfDiamonds = new RummyCard("2", "D");
     var twoOfSpades = new RummyCard("2", "S");
     var threeOfSpades = new RummyCard("3", "S");
     
     game.player(1)._cards = [];
-    game.player(1).takeCards([aceOfSpades, aceOfDiamonds, aceOfHearts, twoOfSpades, threeOfSpades]);
+    game.player(1).takeCards([aceOfSpades, aceOfDiamonds, aceOfHearts, twoOfDiamonds, twoOfSpades, threeOfSpades]);
     
     expect(game.canMeldSelected()).toBe(false);
     
@@ -125,12 +126,19 @@ describe("RummyGame", function() {
     game.deselectCard(3);
     
     game.selectCard(0);
-    game.selectCard(3);
     game.selectCard(4);
+    game.selectCard(5);
     
     expect(game.canMeldSelected()).toBe(true);
     
     game.selectCard(1);
+    
+    expect(game.canMeldSelected()).toBe(false);
+    
+    game.deselectCard(1);
+    game.deselectCard(4);
+    
+    game.selectCard(3);
     
     expect(game.canMeldSelected()).toBe(false);
   });

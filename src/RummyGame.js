@@ -78,7 +78,7 @@ RummyGame.prototype.canMeldSelected = function() {
   
   var isRun = selectedCards.every(function(card, index, cards) {
     if (index == 0) return true;
-    return card.order() == cards[index - 1].order() + 1;
+    return card.order() == cards[index - 1].order() + 1 && card.suit() == cards[index - 1].suit();
   });
   if (isRun) return true;
   
