@@ -49,4 +49,32 @@ describe("RummyGame", function() {
     expect(game.player(1).cards().length).toBe(7);
     expect(game.turn()).toBe(2);
   });
+  
+  it("properly handles turn order", function() {
+    expect(game.turn()).toBe(1);
+    game.draw();
+    expect(game._hasDrawn).toBe(true);
+    game.discard(0);
+    
+    expect(game.turn()).toBe(2);
+    expect(game._hasDrawn).toBe(false);
+    game.draw();
+    expect(game._hasDrawn).toBe(true);
+    game.discard(0);
+    
+    expect(game.turn()).toBe(3);
+    expect(game._hasDrawn).toBe(false);
+    game.draw();
+    expect(game._hasDrawn).toBe(true);
+    game.discard(0);
+    
+    expect(game.turn()).toBe(4);
+    expect(game._hasDrawn).toBe(false);
+    game.draw();
+    expect(game._hasDrawn).toBe(true);
+    game.discard(0);
+    
+    expect(game.turn()).toBe(1);
+    expect(game._hasDrawn).toBe(false);
+  });
 });

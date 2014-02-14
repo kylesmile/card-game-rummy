@@ -47,7 +47,7 @@ RummyGame.prototype.currentPlayer = function() {
 
 RummyGame.prototype.draw = function() {
   if (!this._hasDrawn) {
-    this.player(1).takeCard(this.deck().draw());
+    this.player(this.turn()).takeCard(this.deck().draw());
     this._hasDrawn = true;
   }
 };
@@ -56,6 +56,8 @@ RummyGame.prototype.discard = function(cardIndex) {
   if (this._hasDrawn) {
     var playedCard = this.currentPlayer().play(cardIndex);
     this.discardPile().discard(playedCard);
-    this._turn = this.turn() + 1 % this.playerCount();
+    this._turn = this.turn() + 1;
+    if (this.turn() > this.playerCount()) this._turn = 1;
+    this._hasDrawn = false;
   }
 };
