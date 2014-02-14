@@ -6,29 +6,29 @@ function RummyView(playerNumber) {
 
 RummyView.prototype.imageName = function(card) {
   return card.suit().toLowerCase() + card.rank().toLowerCase() + ".png";
-};
+}
 
 RummyView.prototype.botTurn = function() {
   window.setTimeout(function(view) {
     view.bot.takeTurn();
     view.updateView();
   }, 500, this);
-};
+}
 
 RummyView.prototype.hand = function() {
   return this.game.player(this.player).cards();
-};
+}
 
 RummyView.prototype.discardPile = function() {
   return this.game.discardPile();
-};
+}
 
 RummyView.prototype.displayCards = function(cards, element) {
   cards.forEach(function(card) {
     var li = $('<li><img src="images/cards/' + this.imageName(card) + '"/></li>');
     element.append(li);
   }, this);
-};
+}
 
 RummyView.prototype.updateOpponentHand = function() {
   var cardCount = this.game.player(2).cards().length;
@@ -38,7 +38,7 @@ RummyView.prototype.updateOpponentHand = function() {
     var li = $('<li><img src="images/cards/backs_blue.png"/></li>');
     cardList.append(li);
   }
-};
+}
 
 RummyView.prototype.updateHand = function() {
   var cardsList = $("#hand");
@@ -64,7 +64,7 @@ RummyView.prototype.updateHand = function() {
     }
     cardsList.append(li);
   }, this);
-};
+}
 
 RummyView.prototype.updateDeck = function() {
   var deckSection = $(".deck-discard");
@@ -98,7 +98,7 @@ RummyView.prototype.updateDiscardButton = function() {
     discardButton.addClass('disabled');
   }
   turnSection.append(discardButton);
-};
+}
 
 RummyView.prototype.updateDiscardPile = function() {
   var discardPileSection = $(".deck-discard");
@@ -109,7 +109,7 @@ RummyView.prototype.updateDiscardPile = function() {
   this.displayCards(cards, discardPileList);
   
   discardPileSection.append(discardPileList);
-};
+}
 
 RummyView.prototype.updateView = function() {
   this.updateOpponentHand();
@@ -117,7 +117,7 @@ RummyView.prototype.updateView = function() {
   this.updateDiscardPile();
   this.updateHand();
   this.updateDiscardButton();
-};
+}
 
 $(document).ready(function() {
   var view = new RummyView(1);

@@ -9,12 +9,12 @@ RummyPlayer.prototype.cards = function() {
 RummyPlayer.prototype.takeCard = function(card) {
   this.cards().push(card);
   this.sortCards()
-};
+}
 
 RummyPlayer.prototype.takeCards = function(cards) {
   this.cards().push.apply(this.cards(), cards);
   this.sortCards();
-};
+}
 
 RummyPlayer.prototype.sortCards = function() {
   this.cards().sort(function(card1, card2) {
@@ -26,4 +26,4 @@ RummyPlayer.prototype.sortCards = function() {
 
 RummyPlayer.prototype.play = function(cardIndex) {
   return this.cards().splice(cardIndex, 1)[0];
-};
+}

@@ -8,7 +8,7 @@ function RummyCard(rank, suit) {
 
 RummyCard.prototype.rank = function() {
   return this._rank;
-};
+}
 
 RummyCard.prototype.suit = function() {
   return this._suit;
