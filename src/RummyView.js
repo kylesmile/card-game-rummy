@@ -45,15 +45,23 @@ RummyView.prototype.updateHand = function() {
   cardsList.find('li').remove();
   var hand = this.hand();
   hand.forEach(function(card, index) {
-    var li = $('<li data-index="' + index + '"><img src="images/cards/' + this.imageName(card) + '"/></li>');
-    li.click(this, function(clickEvent) {
+    var li = $('<li data-index="' + index + '"></li>');
+    var image = $('<img src="images/cards/' + this.imageName(card) + '"/>')
+    li.append(image);
+    image.click(this, function(clickEvent) {
       var view = clickEvent.data;
       if (view.game.turn() == view.player) {
-        view.game.discard($(this).data('index'));
+        if ($(this).hasClass('selected')) {
+          view.game.deselectCard(index);
+        } else {
+          view.game.selectCard(index);
+        }
         view.updateView();
-        view.botTurn();
       }
     });
+    if (this.game.selectedIndices.some(function(selectedIndex) { return selectedIndex == index })) {
+      image.addClass('selected');
+    }
     cardsList.append(li);
   }, this);
 };
@@ -74,6 +82,24 @@ RummyView.prototype.updateDeck = function() {
   }
 }
 
+RummyView.prototype.updateDiscardButton = function() {
+  var turnSection = $('.turn');
+  var discardButton = $('<span id="discard-button" class="button">Discard</span>');
+  
+  turnSection.find('#discard-button').remove();
+  if (this.game.canDiscardSelected()) {
+    discardButton.click(this, function(clickEvent) {
+      var view = clickEvent.data;
+      view.game.discard();
+      view.updateView();
+      view.botTurn();
+    });
+  } else {
+    discardButton.addClass('disabled');
+  }
+  turnSection.append(discardButton);
+};
+
 RummyView.prototype.updateDiscardPile = function() {
   var discardPileSection = $(".deck-discard");
   discardPileSection.find('ul').remove();
@@ -90,6 +116,7 @@ RummyView.prototype.updateView = function() {
   this.updateDeck();
   this.updateDiscardPile();
   this.updateHand();
+  this.updateDiscardButton();
 };
 
 $(document).ready(function() {

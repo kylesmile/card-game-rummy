@@ -7,6 +7,7 @@ function RummyGame(playerCount) {
   this._discardPile = new RummyDiscardPile;
   this._hasDrawn = false;
   this._turn = 1;
+  this.selectedIndices = [];
   
   for (var i = 0; i < this._playerCount; i++) {
     this._players.push(new RummyPlayer);
@@ -52,12 +53,27 @@ RummyGame.prototype.draw = function() {
   }
 };
 
-RummyGame.prototype.discard = function(cardIndex) {
-  if (this._hasDrawn) {
-    var playedCard = this.currentPlayer().play(cardIndex);
+RummyGame.prototype.canDiscardSelected = function() {
+  return this.selectedIndices.length == 1 && this._hasDrawn;
+};
+
+RummyGame.prototype.selectCard = function(cardIndex) {
+  if (!this.selectedIndices.some(function(index) { return index == cardIndex })) {
+    this.selectedIndices.push(cardIndex);
+  }
+};
+
+RummyGame.prototype.deselectCard = function(cardIndex) {
+  this.selectedIndices.splice(this.selectedIndices.indexOf(cardIndex), 1);
+};
+
+RummyGame.prototype.discard = function() {
+  if (this._hasDrawn && this.canDiscardSelected()) {
+    var playedCard = this.currentPlayer().play(this.selectedIndices[0]);
     this.discardPile().discard(playedCard);
     this._turn = this.turn() + 1;
     if (this.turn() > this.playerCount()) this._turn = 1;
     this._hasDrawn = false;
+    this.selectedIndices = [];
   }
 };

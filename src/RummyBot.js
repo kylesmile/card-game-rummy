@@ -8,5 +8,6 @@ RummyBot.prototype.game = function() {
 
 RummyBot.prototype.takeTurn = function() {
   this.game().draw();
-  this.game().discard(0);
+  this.game().selectCard(0);
+  this.game().discard();
 };

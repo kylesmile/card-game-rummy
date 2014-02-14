@@ -37,42 +37,61 @@ describe("RummyGame", function() {
   
   it("allows discarding cards", function() {
     expect(game.turn()).toBe(1);
-    game.discard(0);
+    
+    expect(game.canDiscardSelected()).toBe(false);
+    
+    game.selectCard(0);
+    expect(game.canDiscardSelected()).toBe(false);
+    
+    game.discard();
     expect(game.discardPile().size()).toBe(1);
     expect(game.player(1).cards().length).toBe(7);
     expect(game.turn()).toBe(1);
     
     game.draw();
+    expect(game.canDiscardSelected()).toBe(true);
+    
+    game.selectCard(1);
+    expect(game.canDiscardSelected()).toBe(false);
+    
+    game.deselectCard(1);
+    expect(game.canDiscardSelected()).toBe(true);
+    
     expect(game.player(1).cards().length).toBe(8);
-    game.discard(0);
+    game.discard();
     expect(game.discardPile().size()).toBe(2);
     expect(game.player(1).cards().length).toBe(7);
     expect(game.turn()).toBe(2);
+    expect(game.selectedIndices.length).toBe(0);
   });
   
   it("properly handles turn order", function() {
     expect(game.turn()).toBe(1);
     game.draw();
     expect(game._hasDrawn).toBe(true);
-    game.discard(0);
+    game.selectCard(0);
+    game.discard();
     
     expect(game.turn()).toBe(2);
     expect(game._hasDrawn).toBe(false);
     game.draw();
     expect(game._hasDrawn).toBe(true);
-    game.discard(0);
+    game.selectCard(0);
+    game.discard();
     
     expect(game.turn()).toBe(3);
     expect(game._hasDrawn).toBe(false);
     game.draw();
     expect(game._hasDrawn).toBe(true);
-    game.discard(0);
+    game.selectCard(0);
+    game.discard();
     
     expect(game.turn()).toBe(4);
     expect(game._hasDrawn).toBe(false);
     game.draw();
     expect(game._hasDrawn).toBe(true);
-    game.discard(0);
+    game.selectCard(0);
+    game.discard();
     
     expect(game.turn()).toBe(1);
     expect(game._hasDrawn).toBe(false);

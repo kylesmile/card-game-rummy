@@ -46,3 +46,22 @@ li {
 .hand li:first-child, .discard li:first-child {
   text-indent:0;
 }
+
+.selected {
+  box-shadow: 0 0 2px 2px blue;
+}
+
+.button {
+  background-color: #097;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 0.5em;
+}
+
+.button:hover {
+  background-color: #0f7;
+}
+
+.disabled, .disabled:hover {
+  background-color: gray;
+}
