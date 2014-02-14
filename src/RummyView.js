@@ -1,10 +1,18 @@
 function RummyView(playerNumber) {
   this.game = new RummyGame(2);
   this.player = playerNumber;
+  this.bot = new RummyBot(this.game);
 }
 
-function imageName(card) {
+RummyView.prototype.imageName = function(card) {
   return card.suit().toLowerCase() + card.rank().toLowerCase() + ".png";
+};
+
+RummyView.prototype.botTurn = function() {
+  window.setTimeout(function(view) {
+    view.bot.takeTurn();
+    view.updateView();
+  }, 500, this);
 };
 
 RummyView.prototype.hand = function() {
@@ -17,9 +25,9 @@ RummyView.prototype.discardPile = function() {
 
 RummyView.prototype.displayCards = function(cards, element) {
   cards.forEach(function(card) {
-    var li = $('<li><img src="images/cards/' + imageName(card) + '"/></li>');
+    var li = $('<li><img src="images/cards/' + this.imageName(card) + '"/></li>');
     element.append(li);
-  });
+  }, this);
 };
 
 RummyView.prototype.updateOpponentHand = function() {
@@ -37,11 +45,14 @@ RummyView.prototype.updateHand = function() {
   cardsList.find('li').remove();
   var hand = this.hand();
   hand.forEach(function(card, index) {
-    var li = $('<li data-index="' + index + '"><img src="images/cards/' + imageName(card) + '"/></li>');
+    var li = $('<li data-index="' + index + '"><img src="images/cards/' + this.imageName(card) + '"/></li>');
     li.click(this, function(clickEvent) {
-      clickEvent.data.game.discard($(this).data('index'));
-      clickEvent.data.updateView();
-      clickEvent.data.displayDiscardPile();
+      var view = clickEvent.data;
+      if (view.game.turn() == view.player) {
+        view.game.discard($(this).data('index'));
+        view.updateView();
+        view.botTurn();
+      }
     });
     cardsList.append(li);
   }, this);
@@ -54,8 +65,10 @@ RummyView.prototype.updateDeck = function() {
     deck.addClass('deck');
     deck.attr('src', 'images/cards/backs_blue.png');
     deck.click(this, function(clickEvent) {
-      clickEvent.data.game.draw();
-      clickEvent.data.updateView();
+      if (clickEvent.data.game.turn() == clickEvent.data.player) {
+        clickEvent.data.game.draw();
+        clickEvent.data.updateView();
+      }
     });
     deckSection.append(deck)
   }
