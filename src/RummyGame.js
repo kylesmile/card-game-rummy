@@ -57,6 +57,34 @@ RummyGame.prototype.canDiscardSelected = function() {
   return this.selectedIndices.length == 1 && this._hasDrawn;
 };
 
+RummyGame.prototype.canMeldSelected = function() {
+  if (this.selectedIndices.length < 3) return false;
+  
+  var selectedCards = this.selectedIndices.map(function(index) {
+    return this.currentPlayer().cards()[index];
+  }, this);
+    
+  selectedCards.sort(function(card1, card2) {
+    if (card1.order() < card2.order()) return -1;
+    if (card1.order() > card2.order()) return 1;
+    return 0;
+  });
+  
+  var isSet = selectedCards.every(function(card, index, cards) {
+    if (index == 0) return true;
+    return card.rank() == cards[index - 1].rank();
+  });
+  if (isSet) return true;
+  
+  var isRun = selectedCards.every(function(card, index, cards) {
+    if (index == 0) return true;
+    return card.order() == cards[index - 1].order() + 1;
+  });
+  if (isRun) return true;
+  
+  return false;
+};
+
 RummyGame.prototype.selectCard = function(cardIndex) {
   if (!this.selectedIndices.some(function(index) { return index == cardIndex })) {
     this.selectedIndices.push(cardIndex);
