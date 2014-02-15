@@ -105,3 +105,10 @@ RummyGame.prototype.discard = function() {
     this.selectedIndices = [];
   }
 }
+
+RummyGame.prototype.meldSelected = function() {
+  if (this._hasDrawn && this.canMeldSelected()) {
+    this.currentPlayer().meldIndices(this.selectedIndices);
+    this.selectedIndices = [];
+  }
+}

@@ -45,4 +45,32 @@ describe("RummyPlayer", function() {
     expect(cards[3]).toBe(jackOfDiamonds);
     expect(cards[4]).toBe(kingOfClubs);
   });
+  
+  it("keeps track of its melds", function() {
+    var aceOfHearts = new RummyCard("A", "H");
+    var twoOfHearts = new RummyCard("2", "H");
+    var jackOfSpades = new RummyCard("J", "S");
+    var jackOfClubs = new RummyCard("J", "C");
+    
+    player.takeCards([aceOfHearts, twoOfHearts, threeOfHearts, jackOfSpades, jackOfDiamonds, jackOfClubs]);
+    
+    expect(player.melds().length).toBe(0);
+    
+    player.meldIndices([0,1,2]);
+    
+    expect(player.melds().length).toBe(1);
+    expect(player.melds()[0].cards()[0]).toBe(aceOfHearts);
+    expect(player.melds()[0].cards()[1]).toBe(twoOfHearts);
+    expect(player.melds()[0].cards()[2]).toBe(threeOfHearts);
+    
+    expect(player.cards().length).toBe(3);
+    
+    player.meldIndices([0,1,2]);
+    expect(player.melds()[1].cards()[0]).toBe(jackOfSpades);
+    expect(player.melds()[1].cards()[1]).toBe(jackOfDiamonds);
+    expect(player.melds()[1].cards()[2]).toBe(jackOfClubs);
+    
+    expect(player.melds().length).toBe(2);
+    expect(player.cards().length).toBe(0);
+  });
 });
