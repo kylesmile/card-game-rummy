@@ -112,6 +112,8 @@ describe("RummyGame", function() {
     });
     
     it("knows if a new meld is valid", function() {
+      game.deck()._cards.push(new RummyCard('K', 'D'));
+      game.draw();
       expect(game.canMeldSelected()).toBe(false);
       
       game.selectCard(0);

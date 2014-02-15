@@ -58,7 +58,7 @@ RummyGame.prototype.canDiscardSelected = function() {
 }
 
 RummyGame.prototype.canMeldSelected = function() {
-  if (this.selectedIndices.length < 3) return false;
+  if (!this._hasDrawn || this.selectedIndices.length < 3) return false;
   
   var selectedCards = this.selectedIndices.map(function(index) {
     return this.currentPlayer().cards()[index];
@@ -96,7 +96,7 @@ RummyGame.prototype.deselectCard = function(cardIndex) {
 }
 
 RummyGame.prototype.discard = function() {
-  if (this._hasDrawn && this.canDiscardSelected()) {
+  if (this.canDiscardSelected()) {
     var playedCard = this.currentPlayer().play(this.selectedIndices[0]);
     this.discardPile().discard(playedCard);
     this._turn = this.turn() + 1;
@@ -107,7 +107,7 @@ RummyGame.prototype.discard = function() {
 }
 
 RummyGame.prototype.meldSelected = function() {
-  if (this._hasDrawn && this.canMeldSelected()) {
+  if (this.canMeldSelected()) {
     this.currentPlayer().meldIndices(this.selectedIndices);
     this.selectedIndices = [];
   }
