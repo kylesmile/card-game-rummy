@@ -10,7 +10,7 @@ body {
   display: inline-block;
 }
 
-.deck, .discard img, .opponent img {
+.deck, .discard img, #opponent-hand img, .melds img {
   width: 50px;
 }
 
@@ -37,6 +37,10 @@ ul {
   padding: 0;
 }
 
+.meld {
+  display: inline-block;
+}
+
 li {
   display: inline-block;
   margin: 0.2em;
@@ -46,11 +50,11 @@ li {
   text-indent:-35px;
 }
 
-.discard li {
+.discard li, .meld li {
   text-indent:-40px;
 }
 
-.hand li:first-child, .discard li:first-child {
+.hand li:first-child, .discard li:first-child, .meld li:first-child {
   text-indent:0;
 }
 

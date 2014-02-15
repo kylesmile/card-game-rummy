@@ -88,8 +88,10 @@ RummyView.prototype.updateMeldButton = function() {
   
   turnSection.find('#meld-button').remove();
   if (this.game.canMeldSelected()) {
-    meldButton.click(function(clickEvent) {
-      alert("You could meld those if that was implemented!!!")
+    meldButton.click(this, function(clickEvent) {
+      var view = clickEvent.data;
+      view.game.meldSelected();
+      view.updateView();
     });
   } else {
     meldButton.addClass('disabled');
@@ -126,10 +128,25 @@ RummyView.prototype.updateDiscardPile = function() {
   discardPileSection.append(discardPileList);
 }
 
+RummyView.prototype.updatePlayerMelds = function() {
+  var meldsUL = $("#player-melds").find(".melds");
+  meldsUL.empty();
+  
+  this.game.player(1).melds().forEach(function(meld) {
+    var meldLI = $('<li>');
+    var meldUL = $('<ul>');
+    meldUL.addClass('meld');
+    meldLI.append(meldUL);
+    this.displayCards(meld.cards(), meldUL);
+    meldsUL.append(meldUL);
+  }, this);
+}
+
 RummyView.prototype.updateView = function() {
   this.updateOpponentHand();
   this.updateDeck();
   this.updateDiscardPile();
+  this.updatePlayerMelds();
   this.updateHand();
   this.updateDiscardButton();
   this.updateMeldButton();
