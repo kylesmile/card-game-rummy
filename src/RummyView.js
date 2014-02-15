@@ -4,6 +4,18 @@ function RummyView(playerNumber) {
   this.bot = new RummyBot(this.game);
 }
 
+RummyView.prototype.cardImage = function(imageName) {
+  var img = $('<img>');
+  img.attr('src', 'images/cards/' + imageName);
+  return img;
+}
+
+RummyView.prototype.cardInLI = function(imageName) {
+  var li = $('<li>');
+  li.append(this.cardImage(imageName));
+  return li;
+}
+
 RummyView.prototype.imageName = function(card) {
   return card.suit().toLowerCase() + card.rank().toLowerCase() + ".png";
 }
@@ -25,7 +37,7 @@ RummyView.prototype.discardPile = function() {
 
 RummyView.prototype.displayCards = function(cards, element) {
   cards.forEach(function(card) {
-    var li = $('<li><img src="images/cards/' + this.imageName(card) + '"/></li>');
+    var li = this.cardInLI(this.imageName(card));
     element.append(li);
   }, this);
 }
@@ -33,20 +45,20 @@ RummyView.prototype.displayCards = function(cards, element) {
 RummyView.prototype.updateOpponentHand = function() {
   var cardCount = this.game.player(2).cards().length;
   var cardList = $("#opponent-hand");
-  cardList.find('li').remove();
+  cardList.empty();
   for(var i = 0; i < cardCount; i++) {
-    var li = $('<li><img src="images/cards/backs_blue.png"/></li>');
+    var li = this.cardInLI('backs_blue.png');
     cardList.append(li);
   }
 }
 
 RummyView.prototype.updateHand = function() {
   var cardsList = $("#hand");
-  cardsList.find('li').remove();
+  cardsList.empty();
   var hand = this.hand();
   hand.forEach(function(card, index) {
-    var li = $('<li></li>');
-    var image = $('<img src="images/cards/' + this.imageName(card) + '"/>')
+    var li = $('<li>');
+    var image = this.cardImage(this.imageName(card));
     li.append(image);
     image.click(this, function(clickEvent) {
       var view = clickEvent.data;
@@ -69,58 +81,62 @@ RummyView.prototype.updateHand = function() {
 RummyView.prototype.updateDeck = function() {
   var deckSection = $(".deck-discard");
   if (deckSection.find('.deck').length == 0) {
-    var deck = $('<img></img>');
+    var deck = this.cardImage('backs_blue.png');
     deck.addClass('deck');
-    deck.attr('src', 'images/cards/backs_blue.png');
     deck.click(this, function(clickEvent) {
-      if (clickEvent.data.game.turn() == clickEvent.data.player) {
-        clickEvent.data.game.draw();
-        clickEvent.data.updateView();
+      var view = clickEvent.data;
+      if (view.game.turn() == view.player) {
+        view.game.draw();
+        view.updateView();
       }
     });
-    deckSection.append(deck)
+    deckSection.append(deck);
   }
 }
 
-RummyView.prototype.updateMeldButton = function() {
-  var turnSection = $('.turn');
-  var meldButton = $('<a id="meld-button" class="button">Meld</a>');
-  
-  turnSection.find('#meld-button').remove();
-  if (this.game.canMeldSelected()) {
-    meldButton.click(this, function(clickEvent) {
-      var view = clickEvent.data;
-      view.game.meldSelected();
-      view.updateView();
-    });
-  } else {
-    meldButton.addClass('disabled');
-  }
-  turnSection.append(meldButton);
+RummyView.prototype.button = function(text, id, disabled, onclick) {
+  var button = $('<a>');
+  button.attr('id', id);
+  button.addClass('button');
+  button.text(text);
+  if (disabled) button.addClass('disabled');
+  button.click(this, onclick);
+  return button;
 }
 
-RummyView.prototype.updateDiscardButton = function() {
+RummyView.prototype.meldButton = function() {
+  var meldButton = this.button('Meld', 'meld-button', !this.game.canMeldSelected(), function(clickEvent) {
+    var view = clickEvent.data;
+    view.game.meldSelected();
+    view.updateView();
+  });
+  return meldButton;
+}
+
+RummyView.prototype.discardButton = function() {
+  var discardButton = this.button('Discard', 'discard-button', !this.game.canDiscardSelected(), function(clickEvent) {
+    var view = clickEvent.data;
+    view.game.discard();
+    view.updateView();
+    view.botTurn();
+  });
+  return discardButton;
+}
+
+RummyView.prototype.updateButtons = function() {
   var turnSection = $('.turn');
-  var discardButton = $('<a id="discard-button" class="button">Discard</a>');
-  
-  turnSection.find('#discard-button').remove();
-  if (this.game.canDiscardSelected()) {
-    discardButton.click(this, function(clickEvent) {
-      var view = clickEvent.data;
-      view.game.discard();
-      view.updateView();
-      view.botTurn();
-    });
-  } else {
-    discardButton.addClass('disabled');
-  }
+  turnSection.empty();
+  var discardButton = this.discardButton();
+  var meldButton = this.meldButton();
   turnSection.append(discardButton);
+  turnSection.append(meldButton);
 }
 
 RummyView.prototype.updateDiscardPile = function() {
   var discardPileSection = $(".deck-discard");
-  discardPileSection.find('ul').remove();
-  var discardPileList = $('<ul class="discard"></ul>');
+  discardPileSection.find('.discard').remove();
+  var discardPileList = $('<ul>')
+  discardPileList.addClass('discard');
   
   var cards = this.discardPile().cards();
   this.displayCards(cards, discardPileList);
@@ -148,8 +164,7 @@ RummyView.prototype.updateView = function() {
   this.updateDiscardPile();
   this.updatePlayerMelds();
   this.updateHand();
-  this.updateDiscardButton();
-  this.updateMeldButton();
+  this.updateButtons();
 }
 
 $(document).ready(function() {
