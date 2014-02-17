@@ -46,31 +46,62 @@ describe("RummyPlayer", function() {
     expect(cards[4]).toBe(kingOfClubs);
   });
   
-  it("keeps track of its melds", function() {
-    var aceOfHearts = new RummyCard("A", "H");
-    var twoOfHearts = new RummyCard("2", "H");
-    var jackOfSpades = new RummyCard("J", "S");
-    var jackOfClubs = new RummyCard("J", "C");
+  describe("with meldable cards", function() {
+    var aceOfHearts, twoOfHearts, jackOfSpades, jackOfClubs;
     
-    player.takeCards([aceOfHearts, twoOfHearts, threeOfHearts, jackOfSpades, jackOfDiamonds, jackOfClubs]);
+    beforeEach(function() {
+      aceOfHearts = new RummyCard("A", "H");
+      twoOfHearts = new RummyCard("2", "H");
+      jackOfSpades = new RummyCard("J", "S");
+      jackOfClubs = new RummyCard("J", "C");
+      player.takeCards([aceOfHearts, twoOfHearts, threeOfHearts, jackOfSpades, jackOfDiamonds, jackOfClubs]);
+    });
     
-    expect(player.melds().length).toBe(0);
+    it("keeps track of its melds", function() {
+      expect(player.melds().length).toBe(0);
+      
+      player.meldIndices([0,1,2]);
+      
+      expect(player.melds().length).toBe(1);
+      expect(player.melds()[0].cards()[0]).toBe(aceOfHearts);
+      expect(player.melds()[0].cards()[1]).toBe(twoOfHearts);
+      expect(player.melds()[0].cards()[2]).toBe(threeOfHearts);
+      
+      expect(player.cards().length).toBe(3);
+      
+      player.meldIndices([0,1,2]);
+      expect(player.melds()[1].cards()[0]).toBe(jackOfSpades);
+      expect(player.melds()[1].cards()[1]).toBe(jackOfDiamonds);
+      expect(player.melds()[1].cards()[2]).toBe(jackOfClubs);
+      
+      expect(player.melds().length).toBe(2);
+      expect(player.cards().length).toBe(0);
+    });
     
-    player.meldIndices([0,1,2]);
-    
-    expect(player.melds().length).toBe(1);
-    expect(player.melds()[0].cards()[0]).toBe(aceOfHearts);
-    expect(player.melds()[0].cards()[1]).toBe(twoOfHearts);
-    expect(player.melds()[0].cards()[2]).toBe(threeOfHearts);
-    
-    expect(player.cards().length).toBe(3);
-    
-    player.meldIndices([0,1,2]);
-    expect(player.melds()[1].cards()[0]).toBe(jackOfSpades);
-    expect(player.melds()[1].cards()[1]).toBe(jackOfDiamonds);
-    expect(player.melds()[1].cards()[2]).toBe(jackOfClubs);
-    
-    expect(player.melds().length).toBe(2);
-    expect(player.cards().length).toBe(0);
+    it("can be JSONified and objectified", function() {
+      player.meldIndices([0,1,2]);
+      
+      var playerJSON = JSON.stringify(player);
+      var player2 = Object.fromJSON(playerJSON);
+      
+      expect(player2).toBeAKindOf(RummyPlayer);
+      
+      player.cards().forEach(function(card, index) {
+        var card2 = player2.cards()[index];
+        expect(card2).toBeAKindOf(RummyCard);
+        expect(card.rank()).toBe(card2.rank());
+        expect(card.suit()).toBe(card2.suit());
+      });
+      
+      player.melds().forEach(function(meld, index) {
+        var meld2 = player2.melds()[index];
+        meld.cards().forEach(function(card, index) {
+          var card2 = meld2.cards()[index];
+          expect(card2).toBeAKindOf(RummyCard);
+          expect(card.rank()).toBe(card2.rank());
+          expect(card.suit()).toBe(card2.suit());
+        })
+      });
+    });
   });
 });

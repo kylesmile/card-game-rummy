@@ -30,4 +30,14 @@ describe("RummyCard", function() {
     expect(king.points()).toEqual(10);
     expect(ace.points()).toEqual(15);
   });
+  
+  it("can be converted to and from JSON properly", function() {
+    var aceOfSpades = new RummyCard("A", "S");
+    var jsonAce = JSON.stringify(aceOfSpades);
+    var fromJSON = Object.fromJSON(jsonAce);
+    
+    expect(aceOfSpades.rank()).toEqual(fromJSON.rank());
+    expect(aceOfSpades.suit()).toEqual(fromJSON.suit());
+    expect(aceOfSpades.__proto__).toEqual(fromJSON.__proto__);
+  });
 });
