@@ -38,10 +38,10 @@ RummyPlayer.prototype.meldIndices = function(indices) {
     if (indices.indexOf(index) > -1) selectedCards.push(card);
     return selectedCards;
   }, []);
-    
-  this._cards = this.cards().filter(function(card, index) {
-    return indices.indexOf(index) == -1;
-  });
+  
+  for (i = this.cards().length; i >= 0; i--) {
+    if (indices.indexOf(i) > -1) this.cards().splice(i, 1);
+  }
   
   var meld = new RummyMeld;
   meld.meld(meldedCards);
