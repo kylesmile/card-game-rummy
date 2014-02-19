@@ -1,4 +1,4 @@
-rummyApp = angular.module('rummyApp', []);
+var rummyApp = angular.module('rummyApp', []);
 
 rummyApp.game = new RummyGame(2);
 rummyApp.bot = new RummyBot(rummyApp.game);
