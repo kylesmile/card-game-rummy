@@ -6,8 +6,10 @@
   <link href="style.css" rel="stylesheet">
   
   <script src="/lib/angular/angular.min.js"></script>
+  <script src="/lib/apigee.min.js"></script>
   
   <!-- include source files here... -->
+  <script src="/src/Object+JSON.js"></script>
   <script src="/src/RummyCard.js"></script>
   <script src="/src/CardDeck.js"></script>
   <script src="/src/RummyPlayer.js"></script>
@@ -15,6 +17,7 @@
   <script src="/src/RummyMeld.js"></script>
   <script src="/src/RummyGame.js"></script>
   <script src="/src/RummyBot.js"></script>
+  <script src="/src/GameApigeeAdapter.js"></script>
   
   <!-- includ view files here -->
   <script src="/src/RummyApp.js"></script>
@@ -23,12 +26,14 @@
 
 <body>
   
-  <header>
+  <header ng-controller="HeaderController">
     <nav class="main-nav">
       <ul>
         <li class="logo"><a href="/">Rummy</a></li>
         <li><a href="/">Home</a></li>
         <li><a href="#">Rules</a></li>
+        <li><button ng-click="saveGame()">Save Game</button>
+        <li><button ng-click="loadGame()">Load Game</button>
       </ul>
     </nav>
   </header>
