@@ -4,10 +4,10 @@
   <meta content="initial-scale=1.0" name="viewport">
   <title>Rummy</title>
   <link href="style.css" rel="stylesheet">
-  
-  <script src="/lib/angular/angular.min.js"></script>
+
+  <script src="/lib/angular/angular.js"></script>
   <script src="/lib/apigee.min.js"></script>
-  
+
   <!-- include source files here... -->
   <script src="/src/Object+JSON.js"></script>
   <script src="/src/RummyCard.js"></script>
@@ -18,15 +18,26 @@
   <script src="/src/RummyGame.js"></script>
   <script src="/src/RummyBot.js"></script>
   <script src="/src/GameApigeeAdapter.js"></script>
-  
+
   <!-- includ view files here -->
-  <script src="/src/RummyApp.js"></script>
-  
+  <script src="/src/app.js"></script>
+
+  <script src="/src/controllers/headers_controller.js"></script>
+  <script src="/src/controllers/bot_hands_controller.js"></script>
+  <script src="/src/controllers/deck_discards_controller.js"></script>
+  <script src="/src/controllers/melds_controller.js"></script>
+  <script src="/src/controllers/player_hands_controller.js"></script>
+  <script src="/src/controllers/turns_controller.js"></script>
+
+  <script src="/src/helpers/utilities.js"></script>
+
+  <script src="/src/models/adapter.js"></script>
+
 </head>
 
 <body>
-  
-  <header ng-controller="HeaderController">
+
+  <header ng-controller="HeadersController">
     <nav class="main-nav">
       <ul>
         <li class="logo"><a href="/">Rummy</a></li>
@@ -37,18 +48,18 @@
       </ul>
     </nav>
   </header>
-  
+
   <section class="game">
-    
-    <section class="hand" ng-controller="BotHandController">
+
+    <section class="hand" ng-controller="BotHandsController">
       <ul id="opponent-hand">
         <li ng-repeat="card in hand">
           <img src="/images/cards/backs_blue.png">
         </li>
       </ul>
     </section>
-    
-    <section class="deck-discard" ng-controller="DeckDiscardController">
+
+    <section class="deck-discard" ng-controller="DeckDiscardsController">
       <img src="/images/cards/backs_blue.png" class="deck" ng-click="draw()">
       <ul class="discard">
         <li ng-repeat="card in cards">
@@ -56,8 +67,8 @@
         </li>
       </ul>
     </section>
-    
-    <section id="player-melds" ng-controller="MeldController">
+
+    <section id="player-melds" ng-controller="MeldsController">
       <ul class="melds">
         <li ng-repeat="meld in melds">
           <ul class="meld">
@@ -68,20 +79,20 @@
         </li>
       </ul>
     </section>
-    
-    <section class="hand" ng-controller="PlayerHandController">
+
+    <section class="hand" ng-controller="PlayerHandsController">
       <ul id="hand">
         <li ng-repeat="card in hand">
           <img ng-src="{{imageName(card)}}" ng-class="{ selected: isSelected($index)}" ng-click="toggleSelection($index)">
         </li>
       </ul>
     </section>
-    
-    <section class="turn" ng-controller="TurnController">
+
+    <section class="turn" ng-controller="TurnsController">
       <button ng-click="discard()" ng-disabled="!validDiscard()">Discard</button>
       <button ng-click="$timeout(meld())" ng-disabled="!validMeld()">Meld</button>
     </section>
-    
+
   </section>
   <footer>
     <p>Created by Kyle Smith for the RoleModel Software Crafstmanship Academy</p>
