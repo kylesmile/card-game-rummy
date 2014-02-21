@@ -16,6 +16,7 @@ angular.module('rummyApp')
         if (error) {
           alert("Unable to load game");
         }
+        $scope.$apply();
       });
     }
   }]);
